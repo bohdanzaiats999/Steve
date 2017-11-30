@@ -51,7 +51,7 @@ namespace Steve.Web.Controllers
             {
                return Content(ex.Message);
             }
-            return View();
+            return Content("Successful");
         }
 
         public IActionResult About()

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using Steve.BLL.Infrastructure;
 using Steve.BLL.Interfaces;
 using Steve.BLL.Models;
 using Steve.DAL.Interfaces;
 using Steve.DAL.Entities;
 using Steve.DAL.Repositories;
+using Steve.BLL.Security;
 
 namespace Steve.BLL.Services
 {
@@ -29,12 +26,14 @@ namespace Steve.BLL.Services
                 throw new Exception("User already exist");
             }
 
+            string encryptedPassword = new AesCrypt().EncryptAes(userModel.Password);
+
             try
             {
                 Database.Repository<UserEntity>().Insert(new UserEntity
                 {
                     Login = userModel.Login,
-                    Password = userModel.Password
+                    Password = encryptedPassword
                 });
             }
             catch (Exception ex)
