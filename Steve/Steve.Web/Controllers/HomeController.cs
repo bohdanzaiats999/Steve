@@ -19,58 +19,97 @@ namespace Steve.Web.Controllers
             this.userService = userService;
         }
 
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpGet]
         public IActionResult Registration()
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult Registration(string Email,string Password,string ConfirmPassword)
+        public IActionResult Registration(string login,string password,string confirmPassword,string Email)
         {
-            var userView = new UserViewModel
+            var registerView = new RegisterViewModel
             {
-                Login = Email,
-                Password = Password,
-                ConfirmPassword = ConfirmPassword
+                Login = login,
+                Password = password,
+                ConfirmPassword = confirmPassword,
+                Email = Email,
+                Role = UserRoles.User
             };
             try
             {
-                userService.Create(new UserModel
+                userService.Registration(new UserModel
                 {
-                    Login = userView.Login,
-                    Password = userView.Password,
+                    Login = registerView.Login,
+                    Password = registerView.Password,
+                    Email = registerView.Email,
+                    RoleId = (int)registerView.Role
                 });
             }
             catch (Exception ex)
             {
                return Content(ex.Message);
             }
+            
             return Content("Successful");
         }
 
-        public IActionResult About()
+        [HttpGet]
+        public IActionResult Login()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
-        public IActionResult Contact()
+        [HttpPost]
+        public IActionResult Login(string login,string password)
         {
-            ViewData["Message"] = "Your contact page.";
+            var loginView = new LoginViewModel
+            {
+                Login = login,
+                Password = password
+            };
+            try
+            {
+                userService.Login(new UserModel
+                {
+                    Login = loginView.Login,
+                    Password = loginView.Password,
+                });
 
-            return View();
+            }
+            catch (Exception ex)
+            {
+
+                return Content(ex.Message);
+            }
+            return userService.GetIdRole() == 1 ? View("Views/AdminPanel/Index.cshtml") : View("UserPanel");
         }
 
-        public IActionResult Error()
+        [HttpGet]
+        public IActionResult ChangePasswordByEmail()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ChangePasswordByEmail(string login)
+        {
+            var changePassView = new ChangePasswordByEmailViewModel
+            {
+                Login = login
+            };
+            try
+            {
+                userService.ChangePasswordByEmail(new UserModel
+                {
+                    Login = changePassView.Login
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.Message);
+            }
+            return Content("Your new password sent by email");
         }
     }
 }

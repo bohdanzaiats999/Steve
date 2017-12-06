@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Steve.Web.Models
 {
-    public class UserViewModel
+    public class RegisterViewModel
     {
         public int Id { get; set; }
 
@@ -20,10 +20,17 @@ namespace Steve.Web.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        public UserRoles Role { get; set; }
 
     }
 }

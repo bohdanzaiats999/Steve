@@ -14,7 +14,7 @@ namespace Steve.DAL.Repositories
     {
 
         private readonly SteveContext context;
-        private DbSet<T> entities;
+        private readonly DbSet<T> entities;
         public UserRepository(SteveContext context)
         {
             this.context = context;
@@ -30,6 +30,7 @@ namespace Steve.DAL.Repositories
         {
             return this.context.Users.FirstOrDefault(u => u.Login == login);
         }
+
         public void Insert(T entity)
         {
             if (entity == null)
@@ -38,6 +39,7 @@ namespace Steve.DAL.Repositories
             }
             this.entities.Add(entity);
         }
+
         public void Update(T entity)
         {
             if (entity == null)

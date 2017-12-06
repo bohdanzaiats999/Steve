@@ -3402,11 +3402,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "D:\\Github Progect\\Steve\\Steve\\DAL\\Steve.DAL.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Documents\\Github Projects\\Steve\\Steve\\DAL\\Steve.DAL.csproj",
       "projectName": "Steve.DAL",
-      "projectPath": "D:\\Github Progect\\Steve\\Steve\\DAL\\Steve.DAL.csproj",
+      "projectPath": "C:\\Users\\User\\Documents\\Github Projects\\Steve\\Steve\\DAL\\Steve.DAL.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "D:\\Github Progect\\Steve\\Steve\\DAL\\obj\\",
+      "outputPath": "C:\\Users\\User\\Documents\\Github Projects\\Steve\\Steve\\DAL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

@@ -11,9 +11,10 @@ using System;
 namespace Steve.DAL.Migrations
 {
     [DbContext(typeof(SteveContext))]
-    partial class SteveContextModelSnapshot : ModelSnapshot
+    [Migration("20171201064836_Initial3")]
+    partial class Initial3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,8 +31,6 @@ namespace Steve.DAL.Migrations
                     b.Property<string>("Login");
 
                     b.Property<string>("Password");
-
-                    b.Property<int>("RoleId");
 
                     b.HasKey("Id");
 

@@ -5,11 +5,20 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Steve.BLL.Models;
+using System.Collections;
+using System.Linq;
 
 namespace Steve.BLL.Interfaces
 {
     public interface IUserService
     {
-        void Create(UserModel userModel);
+        void Registration(UserModel userModel);
+        void Login(UserModel userModel);
+        void ChangePasswordByEmail(UserModel userModel);
+        int GetIdRole();
+        IQueryable GetAllUsers();
+
+
+
     }
 }
