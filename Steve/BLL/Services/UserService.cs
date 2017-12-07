@@ -92,36 +92,45 @@ namespace Steve.BLL.Services
             user.Password = encryptedNewPassword;
             Database.Repository<UserEntity>().Update(user);
             Database.SaveChanges();
+
             //From Address  
-            string FromAddress = "bohdan2131@gmail.com";
-            string FromAdressTitle = "Email from Bohdan Zaiats";
+            string fromAdressTitle = "Email from Bohdan Zaiats";
             //To Address  
-            string ToAddress = user.Email;
-            string ToAdressTitle = user.Email;
-            string Subject = "Generating new pasword";
-            string BodyContent = $"Your New password: {newPassword}";
+            string toAddress = user.Email;
+            string subject = "Generating new pasword";
+            string bodyContent = $"Your New password: {newPassword}";
 
-            //Smtp Server  
-            string SmtpServer = "smtp.gmail.com";
-            //Smtp Port Number  
-            int SmtpPortNumber = 587;
+            SendEmail(fromAdressTitle,toAddress,subject,bodyContent);
+        }
 
-            var mimeMessage = new MimeMessage();
-            mimeMessage.From.Add(new MailboxAddress(FromAdressTitle, FromAddress));
-            mimeMessage.To.Add(new MailboxAddress(ToAdressTitle, ToAddress));
-            mimeMessage.Subject = Subject;
-            mimeMessage.Body = new TextPart("plain")
+        public void SendEmail(string fromAdressTitle,string toAddress,string subject,string bodyContent)
+        {
+            string fromAddress = "bohdan2131@gmail.com";
+            string smtpServer = "smtp.gmail.com";
+            int smtpPortNumber = 587;
+
+            try
             {
-                Text = BodyContent
-            };
+                var mimeMessage = new MimeMessage();
+                mimeMessage.From.Add(new MailboxAddress(fromAdressTitle, fromAddress));
+                mimeMessage.To.Add(new MailboxAddress(toAddress, toAddress));
+                mimeMessage.Subject = subject;
+                mimeMessage.Body = new TextPart("plain")
+                {
+                    Text = bodyContent
+                };
 
-            using (var client = new SmtpClient())
+                using (var client = new SmtpClient())
+                {
+                    client.Connect(smtpServer, smtpPortNumber, false);
+                    client.Authenticate("bohdan2131@gmail.com", "bohdan123");
+                    client.Send(mimeMessage);
+                    client.Disconnect(true);
+                }
+            }
+            catch (Exception ex)
             {
-
-                client.Connect(SmtpServer, SmtpPortNumber, false);
-                client.Authenticate("bohdan2131@gmail.com", "bohdan123");
-                client.Send(mimeMessage);
-                client.Disconnect(true);
+                throw new Exception(ex.Message);
             }
         }
 

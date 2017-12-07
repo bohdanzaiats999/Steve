@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Send Email";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Send Email</title>
+
+    <style>
+        input.text {
+            width: 200px;
+            height: 150px;
+            padding: 5px 10px 5px 10px;
+            border: 1px solid #999;
+        }
+    </style>
+</head>
+<body>
+    <form method="post">
+        <div>
+            <br />
+                <p><input type="text" size="100" name="FromAdressTitle" placeholder="From Adress Title" /></p>
+                <p><input type="text" size="100" name="ToAddress" placeholder="To Address" /></p>
+                <p><input type="text" size="100" name="Subject" placeholder="Subject" /></p>
+                <p><textarea name="BodyContent" rows="15" cols="102" placeholder="Body Content" ></textarea></p>
+                <p><input type="submit" value="Send" />
+        </div>
+    </form>
+</body>
+</html>
+

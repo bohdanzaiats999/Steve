@@ -16,6 +16,7 @@ namespace Steve.BLL.Interfaces
         void Login(UserModel userModel);
         void ChangePasswordByEmail(UserModel userModel);
         int GetIdRole();
+        void SendEmail(string fromAdressTitle, string toAddress, string subject, string bodyContent);
         IQueryable GetAllUsers();
 
 
