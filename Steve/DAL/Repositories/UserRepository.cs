@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Linq;
 using Steve.DAL.Entities;
+using System.Collections;
 
 namespace Steve.DAL.Repositories
 {
@@ -29,6 +30,11 @@ namespace Steve.DAL.Repositories
         public UserEntity GetByLogin(string login)
         {
             return this.context.Users.FirstOrDefault(u => u.Login == login);
+        }
+
+        public IList<UserEntity> GetAll()
+        {
+            return this.context.Users.ToList();
         }
 
         public void Insert(T entity)

@@ -82,7 +82,9 @@ namespace Steve.Web.Controllers
 
                 return Content(ex.Message);
             }
-            return userService.GetIdRole() == 1 ? View("Views/AdminPanel/Index.cshtml") : View("UserPanel");
+            
+
+            return userService.GetIdRole() == 1 ? RedirectToAction("Index", "AdminPanel") : RedirectToAction("Index", "UserPanel");
         }
 
         [HttpGet]

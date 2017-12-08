@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Steve.BLL.Interfaces;
 using System.Collections;
 using Steve.Web.Models;
+using Steve.BLL.Models;
 
 namespace Steve.Web.Controllers
 {
@@ -17,35 +18,55 @@ namespace Steve.Web.Controllers
         {
             this.userService = userService;
         }
+        [HttpGet]
         public IActionResult Index()
         {
-            return View(userService.GetAllUsers());
+
+            return View();
         }
         [HttpGet]
         public IActionResult SendEmail()
         {
-            return View();
+            var users = userService.GetAllUsers();
+            List<UserModel> userList = new List<UserModel>();
+
+            foreach (var user in users)
+            {
+                userList.Add(new UserModel
+                {
+                    Id = user.Id,
+                    Login = user.Login,
+                    Email = user.Email,
+                    RoleId = user.RoleId,
+                    Checked = false
+
+                });
+            }
+            return View(userList);
         }
         [HttpPost]
-        public IActionResult SendEmail(string fromAdressTitle, string toAddress, string subject, string bodyContent)
+        public IActionResult SendEmail(string fromAdressTitle, string toAddress, string subject, string bodyContent, List<UserModel> list)
         {
-            var emailView = new EmailViewModel
-            {
-                FromAdressTitle = fromAdressTitle,
-                ToAddress = toAddress,
-                Subject = subject,
-                BodyContent = bodyContent
-            };
-
             try
             {
-                userService.SendEmail(fromAdressTitle, toAddress, subject, bodyContent);
+                if (toAddress != null)
+                {
+                    userService.SendEmail(fromAdressTitle, toAddress, subject, bodyContent);
+                }
+
+                foreach (var user in list)
+                {
+                    if (user.Checked == true)
+                    {
+                        userService.SendEmail(fromAdressTitle, user.Email, subject, bodyContent);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 return Content(ex.Message);
             }
-            return Content("Successful");
+            return View(list);
         }
     }
 }

@@ -10,6 +10,7 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Steve.BLL.Services
 {
@@ -139,9 +140,9 @@ namespace Steve.BLL.Services
             return IdRole;
         }
 
-        public IQueryable GetAllUsers()
+        public IList<UserEntity> GetAllUsers()
         {
-            return Database.Repository<UserEntity>().Include(u => u.Login);
+            return Database.Repository<UserEntity>().GetAll();
         }
     }
 }
