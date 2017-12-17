@@ -20,12 +20,34 @@ namespace Steve.DAL.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Steve.DAL.Entities.EmailEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("BodyContent");
+
+                    b.Property<string>("EmailAdress");
+
+                    b.Property<string>("FromAdressTitle");
+
+                    b.Property<DateTime?>("SendingTime");
+
+                    b.Property<string>("Subject");
+
+                    b.Property<string>("ToAddress");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Emails");
+                });
+
             modelBuilder.Entity("Steve.DAL.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<int?>("EmailId");
 
                     b.Property<string>("Login");
 
@@ -35,7 +57,16 @@ namespace Steve.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmailId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Steve.DAL.Entities.UserEntity", b =>
+                {
+                    b.HasOne("Steve.DAL.Entities.EmailEntity", "Email")
+                        .WithMany("Users")
+                        .HasForeignKey("EmailId");
                 });
 #pragma warning restore 612, 618
         }

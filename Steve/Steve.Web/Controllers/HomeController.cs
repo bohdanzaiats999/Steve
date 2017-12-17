@@ -17,6 +17,7 @@ namespace Steve.Web.Controllers
         public HomeController(IUserService userService)
         {
             this.userService = userService;
+            userService.GetAndSendInTime();
         }
 
         [HttpGet]
@@ -26,31 +27,23 @@ namespace Steve.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registration(string login,string password,string confirmPassword,string Email)
+        public IActionResult Registration(RegisterViewModel model)
         {
-            var registerView = new RegisterViewModel
-            {
-                Login = login,
-                Password = password,
-                ConfirmPassword = confirmPassword,
-                Email = Email,
-                Role = UserRoles.User
-            };
             try
             {
                 userService.Registration(new UserModel
                 {
-                    Login = registerView.Login,
-                    Password = registerView.Password,
-                    Email = registerView.Email,
-                    RoleId = (int)registerView.Role
+                    Login = model.Login,
+                    Password = model.Password,
+                    Email = model.Email,
+                    RoleId = (int)UserRoles.User
                 });
             }
             catch (Exception ex)
             {
-               return Content(ex.Message);
+                return Content(ex.Message);
             }
-            
+
             return Content("Successful");
         }
 
@@ -61,29 +54,21 @@ namespace Steve.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string login,string password)
+        public IActionResult Login(LoginViewModel model)
         {
-            var loginView = new LoginViewModel
-            {
-                Login = login,
-                Password = password
-            };
             try
             {
                 userService.Login(new UserModel
                 {
-                    Login = loginView.Login,
-                    Password = loginView.Password,
+                    Login = model.Login,
+                    Password = model.Password,
                 });
 
             }
             catch (Exception ex)
             {
-
                 return Content(ex.Message);
             }
-            
-
             return userService.GetIdRole() == 1 ? RedirectToAction("Index", "AdminPanel") : RedirectToAction("Index", "UserPanel");
         }
 
@@ -92,18 +77,15 @@ namespace Steve.Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult ChangePasswordByEmail(string login)
+        public IActionResult ChangePasswordByEmail(ChangePasswordByEmailViewModel model)
         {
-            var changePassView = new ChangePasswordByEmailViewModel
-            {
-                Login = login
-            };
             try
             {
                 userService.ChangePasswordByEmail(new UserModel
                 {
-                    Login = changePassView.Login
+                    Login = model.Login
                 });
 
             }

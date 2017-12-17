@@ -21,13 +21,12 @@ namespace Steve.Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-
             return View();
         }
         [HttpGet]
         public IActionResult SendEmail()
         {
-            var users = userService.GetAllUsers();
+            var users = userService.GetAllUsersWithEmail();
             List<UserModel> userList = new List<UserModel>();
 
             foreach (var user in users)
@@ -36,37 +35,60 @@ namespace Steve.Web.Controllers
                 {
                     Id = user.Id,
                     Login = user.Login,
-                    Email = user.Email,
+                    Email = user.Email.EmailAdress,
                     RoleId = user.RoleId,
                     Checked = false
-
                 });
             }
-            return View(userList);
+
+            ViewBag.A = userList;
+            return View(new EmailViewModel { UserList = userList });
         }
         [HttpPost]
-        public IActionResult SendEmail(string fromAdressTitle, string toAddress, string subject, string bodyContent, List<UserModel> list)
+        public IActionResult SendEmail(EmailViewModel model)
         {
             try
             {
-                if (toAddress != null)
+                if (model.ToAddress != null)
                 {
-                    userService.SendEmail(fromAdressTitle, toAddress, subject, bodyContent);
+                    userService.SendEmail(new EmailModel
+                    {
+                        FromAdressTitle = model.FromAdressTitle,
+                        ToAddress = model.ToAddress,
+                        Subject = model.Subject,
+                        BodyContent = model.BodyContent
+                    });
                 }
-
-                foreach (var user in list)
+                foreach (var user in model.UserList)
                 {
                     if (user.Checked == true)
                     {
-                        userService.SendEmail(fromAdressTitle, user.Email, subject, bodyContent);
+                        var email = new EmailModel
+                        {
+                            FromAdressTitle = model.FromAdressTitle,
+                            ToAddress = user.Email,
+                            Subject = model.Subject,
+                            BodyContent = model.BodyContent,
+                            SendingTime = model.SendingTime
+                        };
+
+                        if (model.SendingTime <= DateTime.Now)
+                            userService.SendEmail(email);
+                        else
+                        {
+                            userService.SaveTimerData(user.Id, email);
+                            userService.CansellTask();
+                            userService.GetAndSendInTime();
+                        }
                     }
                 }
+
             }
             catch (Exception ex)
             {
                 return Content(ex.Message);
             }
-            return View(list);
+            return View(model);
         }
     }
 }

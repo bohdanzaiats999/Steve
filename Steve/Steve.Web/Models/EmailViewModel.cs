@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Steve.BLL.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace Steve.Web.Models
 {
     public class EmailViewModel
     {
+
         [Required]
         [Display(Name = "From Adress Title")]
         public string FromAdressTitle { get; set; }
@@ -20,5 +22,7 @@ namespace Steve.Web.Models
         [Required]
         [Display(Name = "Body Content")]
         public string BodyContent { get; set; }
+        public List<UserModel> UserList { get; set; }
+        public DateTime SendingTime { get; set; }
     }
 }

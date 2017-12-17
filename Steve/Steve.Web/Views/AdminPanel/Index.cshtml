@@ -1,23 +1,22 @@
-﻿    @{
-        ViewData["Title"] = "Admin Panel";
-    }
+﻿@{
+    ViewData["Title"] = "Admin Panel";
+}
 
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Admin Panel</title>
-    </head>
-    <body>
-        <form method="post">
-            <div>
-                <p><h1>Admin Panel</h1>  </p>
-            </div>
-            <div>
-                <br />
-                <h3><a asp-area="" asp-controller="AdminPanel" asp-action="SendEmail">SendEmail</a></h3>
-                <br />
-
-            </div>
-        </form>
-    </body>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <form method="post">
+        <div>
+            <p><h1>Admin Panel</h1>  </p>
+        </div>
+        <div>
+            <br />
+            <h3><a asp-controller="AdminPanel" asp-action="SendEmail">SendEmail</a></h3>
+            <br />
+        </div>
+    </form>
+</body>
 </html>

@@ -8,12 +8,18 @@ namespace Steve.DAL.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.RenameColumn(
+                name: "ToAddresses",
+                table: "Emails",
+                newName: "ToAddress");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.RenameColumn(
+                name: "ToAddress",
+                table: "Emails",
+                newName: "ToAddresses");
         }
     }
 }

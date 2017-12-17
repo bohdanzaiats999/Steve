@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html>
-
 @using Steve.BLL.Models;
-@model List<UserModel>
+@model EmailViewModel
 @{
     ViewData["Title"] = "Send Email";
 }
@@ -15,39 +14,57 @@
         <div>
             <h1>Send Email</h1>
         </div>
-            <br />
-                <p><input type="text" size="101" name="FromAdressTitle" placeholder="From Adress Title" /></p>
-                <p><input type="text" size="101" name="ToAddress" placeholder="To Address" /></p>
-                <p><input type="text" size="101" name="Subject" placeholder="Subject" /></p>
-                <p><textarea name="BodyContent" rows="15" cols="102" placeholder="Body Content" ></textarea></p>
+
+        <br />
+
         <div>
+            <p><input type="text" asp-for="FromAdressTitle" size="101" placeholder="From Adress Title" /></p>
+        </div>
+
+        <div>
+            <p><input type="text" asp-for="ToAddress" size="101" placeholder="To Address" /></p>
+        </div>
+
+        <div>
+            <p><input type="text" asp-for="Subject" size="101" placeholder="Subject" /></p>
+        </div>
+
+        <div>
+            <p><textarea asp-for="BodyContent" rows="15" cols="102" placeholder="Body Content"></textarea></p>
+        </div>
+
+        <div>
+            <label asp-for="SendingTime">Timer: </label>
+            <input type="datetime-local" asp-for="SendingTime" value="" />
 
             <h2>List of users</h2>
-@using (Html.BeginForm())
-{
-    for (var i = 0; i < Model.Count(); i++)
-    {
-        <table>
-            <tr>
-                <td>
-                    @Html.HiddenFor(it => it[i].Id)
-                    @Html.HiddenFor(it => it[i].Email)
 
 
-                User: @Html.DisplayFor(it => it[i].Login)
-                </td>
-                <td>
-                    @Html.CheckBoxFor(it => it[i].Checked, new { Style = "vertical-align:3px}" })
-                </td>
-            </tr>
-        </table>
+            @for (var i = 0; i < Model.UserList.Count(); i++)
+            {
+                <table>
+                    <tr>
+                        <td>
+                            <input type="hidden" asp-for="UserList[i].Id" />
+                            <input type="hidden" asp-for="UserList[i].Email" />
+                            <input type="hidden" asp-for="UserList[i].Login" />
 
-    }
-}
+                            <text>User @Model.UserList[i].Login</text>
+                        </td>
 
-    <p><input type="submit" value="Send" />
+                        <td>
+                            <input type="checkbox" asp-for="UserList[i].Checked" />
+                        </td>
+                    </tr>
+                </table>
+            }
+            <br />
+
+            <div>
+                <p><input type="submit" value="Send" /></p>
+            </div>
         </div>
+
     </form>
 </body>
 </html>
-

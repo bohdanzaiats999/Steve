@@ -8,8 +8,6 @@ namespace Steve.Web.Models
 {
     public class RegisterViewModel
     {
-        public int Id { get; set; }
-
         [Required]
         [Display(Name = "Login")]
         public string Login { get; set; }
@@ -29,8 +27,6 @@ namespace Steve.Web.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
-        public UserRoles Role { get; set; }
 
     }
 }

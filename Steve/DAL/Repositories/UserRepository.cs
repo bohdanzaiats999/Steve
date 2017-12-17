@@ -32,9 +32,13 @@ namespace Steve.DAL.Repositories
             return this.context.Users.FirstOrDefault(u => u.Login == login);
         }
 
-        public IList<UserEntity> GetAll()
+        public IList<UserEntity> GetAllUsers()
         {
             return this.context.Users.ToList();
+        }
+        public IList<EmailEntity> GetAllEmails()
+        {
+            return this.context.Emails.ToList();
         }
 
         public void Insert(T entity)

@@ -11,13 +11,19 @@ using MimeKit;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Steve.BLL.Services
 {
     public class UserService : IUserService
     {
         IUnitOfWork Database { get; set; }
+
         private static int IdRole { get; set; }
+
+        private CancellationTokenSource CancellationToken { get; set; }
+
         public UserService()
         {
             Database = new UnitOfWork();
@@ -40,7 +46,7 @@ namespace Steve.BLL.Services
                 {
                     Login = userModel.Login,
                     Password = encryptedPassword,
-                    Email = userModel.Email,
+                    Email = new EmailEntity { EmailAdress = userModel.Email },
                     RoleId = userModel.RoleId
                 });
             }
@@ -97,15 +103,22 @@ namespace Steve.BLL.Services
             //From Address  
             string fromAdressTitle = "Email from Bohdan Zaiats";
             //To Address  
-            string toAddress = user.Email;
+            string toAddress = user.Email.EmailAdress;
             string subject = "Generating new pasword";
             string bodyContent = $"Your New password: {newPassword}";
 
-            SendEmail(fromAdressTitle,toAddress,subject,bodyContent);
+            SendEmail(new EmailModel
+            {
+                FromAdressTitle = fromAdressTitle,
+                ToAddress = toAddress,
+                Subject = subject,
+                BodyContent = bodyContent
+            });
         }
 
-        public void SendEmail(string fromAdressTitle,string toAddress,string subject,string bodyContent)
+        public void SendEmail(EmailModel emailModel)
         {
+
             string fromAddress = "bohdan2131@gmail.com";
             string smtpServer = "smtp.gmail.com";
             int smtpPortNumber = 587;
@@ -113,12 +126,12 @@ namespace Steve.BLL.Services
             try
             {
                 var mimeMessage = new MimeMessage();
-                mimeMessage.From.Add(new MailboxAddress(fromAdressTitle, fromAddress));
-                mimeMessage.To.Add(new MailboxAddress(toAddress, toAddress));
-                mimeMessage.Subject = subject;
+                mimeMessage.From.Add(new MailboxAddress(emailModel.FromAdressTitle, fromAddress));
+                mimeMessage.To.Add(new MailboxAddress(emailModel.ToAddress, emailModel.ToAddress));
+                mimeMessage.Subject = emailModel.Subject;
                 mimeMessage.Body = new TextPart("plain")
                 {
-                    Text = bodyContent
+                    Text = emailModel.BodyContent
                 };
 
                 using (var client = new SmtpClient())
@@ -135,14 +148,74 @@ namespace Steve.BLL.Services
             }
         }
 
+        public void SaveTimerData(int userId, EmailModel model)
+        {
+            var email = Database.Repository<EmailEntity>().GetById(userId);
+
+            email.BodyContent = model.BodyContent;
+            email.Subject = model.Subject;
+            email.ToAddress = model.ToAddress;
+            email.FromAdressTitle = model.FromAdressTitle;
+            email.SendingTime = model.SendingTime;
+
+            Database.Repository<EmailEntity>().Update(email);
+            Database.SaveChanges();
+        }
+
+        public void CansellTask()
+        {
+            if (CancellationToken != null)
+            {
+                CancellationToken.Cancel();
+            }
+        }
+
+        public async void GetAndSendInTime()
+        {
+            CancellationToken = new CancellationTokenSource();
+
+            var emailList = GetEmailList();
+            foreach (var email in emailList)
+            {
+                if (email.SendingTime != null)
+                {
+                    DateTime sendingTime = (DateTime)email.SendingTime;
+                    TimeSpan interval = sendingTime - DateTime.Now;
+
+                    if (interval > TimeSpan.Zero)
+                    {
+                        await Task.Run(() =>
+                        {
+                            Thread.Sleep(interval);
+                            SendEmail(new EmailModel
+                            {
+                                FromAdressTitle = email.FromAdressTitle,
+                                ToAddress = email.ToAddress,
+                                Subject = email.Subject,
+                                BodyContent = email.BodyContent
+                            });
+                            email.SendingTime = DateTime.MinValue;
+                            Database.Repository<EmailEntity>().Update(email);
+                            Database.SaveChanges();
+                        });
+                    }
+                }
+            }
+        }
+
         public int GetIdRole()
         {
             return IdRole;
         }
 
-        public IList<UserEntity> GetAllUsers()
+        public IList<UserEntity> GetAllUsersWithEmail()
         {
-            return Database.Repository<UserEntity>().GetAll();
+            return Database.Repository<UserEntity>().Include(e => e.Email).ToList();
+        }
+
+        public IList<EmailEntity> GetEmailList()
+        {
+            return Database.Repository<EmailEntity>().GetAllEmails();
         }
     }
 }

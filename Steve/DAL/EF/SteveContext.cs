@@ -14,6 +14,8 @@ namespace Steve.DAL.EF
             optionsBuilder.UseSqlServer("Data Source=DESKTOP-VSNMGHA\\SQLEXPRESS;Initial Catalog=T;Integrated Security=True;Pooling=False");
         }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<EmailEntity> Emails { get; set; }
+
 
 
 

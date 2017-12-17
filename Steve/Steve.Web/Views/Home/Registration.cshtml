@@ -1,4 +1,4 @@
-﻿
+﻿@model Steve.Web.Models.RegisterViewModel
 @{
     ViewData["Title"] = "Registration";
 }
@@ -10,16 +10,24 @@
     <title>Registration</title>
 </head>
 <body>
-    <form method="post">
     <div>
         <br />
-        <p><input type="text" name="Login" placeholder="Login" /></p>
-        <p><input type="password" name="Password" placeholder="Password" /></p>
-        <p><input type="password" name="ConfirmPassword" placeholder="Confirm Password" /></p>
-        <p><input type="text" name="Email" placeholder="Email" /></p>
-        <p><input type="submit" value="Register" /></p>
+        @using (Html.BeginForm())
+            {
+            <div>
+                <p><input type="text" asp-for="Login" placeholder="Login"/></p>
+            </div>
+            <div>
+                <p><input type="password" asp-for="Password" placeholder="Password"/></p>
+            </div>
+            <div>
+                <p><input type="password" asp-for="ConfirmPassword" placeholder="Confirm Password"/></p>
+            </div>
+                <div>
+                    <p><input type="email" asp-for="Email" placeholder="Email"/></p>
+                </div>
+                <p><input type="submit" value="Register" /></p>
+        }
     </div>
-    </form>
 </body>
 </html>
-
