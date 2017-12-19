@@ -78,7 +78,7 @@ namespace Steve.Web.Controllers
                         {
                             userService.SaveTimerData(user.Id, email);
                             userService.CansellTask();
-                            userService.GetAndSendInTime();
+                            userService.TimerSendEmail();
                         }
                     }
                 }

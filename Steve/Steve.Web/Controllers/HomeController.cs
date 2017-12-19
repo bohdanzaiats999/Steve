@@ -17,7 +17,7 @@ namespace Steve.Web.Controllers
         public HomeController(IUserService userService)
         {
             this.userService = userService;
-            userService.GetAndSendInTime();
+            userService.TimerSendEmail();
         }
 
         [HttpGet]

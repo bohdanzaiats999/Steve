@@ -1,5 +1,4 @@
 ﻿using System;
-using Steve.BLL.Infrastructure;
 using Steve.BLL.Interfaces;
 using Steve.BLL.Models;
 using Steve.DAL.Interfaces;
@@ -22,6 +21,7 @@ namespace Steve.BLL.Services
 
         private static int IdRole { get; set; }
 
+        // Cansell all Task
         private CancellationTokenSource CancellationToken { get; set; }
 
         public UserService()
@@ -37,7 +37,7 @@ namespace Steve.BLL.Services
             {
                 throw new Exception("User already exist");
             }
-
+            // Encrypt the password
             string encryptedPassword = new AesCrypt().EncryptAes(userModel.Password);
 
             try
@@ -52,7 +52,6 @@ namespace Steve.BLL.Services
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
             Database.SaveChanges();
@@ -69,14 +68,14 @@ namespace Steve.BLL.Services
             }
 
             string encryptedPassword = new AesCrypt().EncryptAes(userModel.Password);
-
+            // Compare password in database and user paswword
             if (user.Password != encryptedPassword)
             {
                 throw new Exception("Password is wrong");
             }
             IdRole = user.RoleId;
         }
-
+        // Change password if user forgot it and send it on Email
         public void ChangePasswordByEmail(UserModel userModel)
         {
             string newPassword = string.Empty;
@@ -88,6 +87,7 @@ namespace Steve.BLL.Services
             {
                 throw new Exception("User not found");
             }
+            // Generate uniqe password
             do
             {
                 newPassword = new GenerateNewPassword().Generate();
@@ -100,9 +100,8 @@ namespace Steve.BLL.Services
             Database.Repository<UserEntity>().Update(user);
             Database.SaveChanges();
 
-            //From Address  
+            // Email data
             string fromAdressTitle = "Email from Bohdan Zaiats";
-            //To Address  
             string toAddress = user.Email.EmailAdress;
             string subject = "Generating new pasword";
             string bodyContent = $"Your New password: {newPassword}";
@@ -147,7 +146,7 @@ namespace Steve.BLL.Services
                 throw new Exception(ex.Message);
             }
         }
-
+        // Save Email data in database if using timer
         public void SaveTimerData(int userId, EmailModel model)
         {
             var email = Database.Repository<EmailEntity>().GetById(userId);
@@ -161,7 +160,7 @@ namespace Steve.BLL.Services
             Database.Repository<EmailEntity>().Update(email);
             Database.SaveChanges();
         }
-
+        // Cansell all tasks
         public void CansellTask()
         {
             if (CancellationToken != null)
@@ -169,19 +168,23 @@ namespace Steve.BLL.Services
                 CancellationToken.Cancel();
             }
         }
-
-        public async void GetAndSendInTime()
+        // Send Email using timer
+        public async void TimerSendEmail()
         {
             CancellationToken = new CancellationTokenSource();
 
+            // Get all email objects
             var emailList = GetEmailList();
+
             foreach (var email in emailList)
             {
+                
                 if (email.SendingTime != null)
                 {
                     DateTime sendingTime = (DateTime)email.SendingTime;
+                    // Get intervar for timer
                     TimeSpan interval = sendingTime - DateTime.Now;
-
+                    // When there is some interval
                     if (interval > TimeSpan.Zero)
                     {
                         await Task.Run(() =>
@@ -202,17 +205,17 @@ namespace Steve.BLL.Services
                 }
             }
         }
-
+        // Get user role
         public int GetIdRole()
         {
             return IdRole;
         }
-
+        // Get all users with email objects
         public IList<UserEntity> GetAllUsersWithEmail()
         {
             return Database.Repository<UserEntity>().Include(e => e.Email).ToList();
         }
-
+        // Get email objects
         public IList<EmailEntity> GetEmailList()
         {
             return Database.Repository<EmailEntity>().GetAllEmails();

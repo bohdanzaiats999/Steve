@@ -1,5 +1,4 @@
-﻿using Steve.BLL.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
@@ -18,7 +17,7 @@ namespace Steve.BLL.Interfaces
         void ChangePasswordByEmail(UserModel userModel);
         int GetIdRole();
         void SendEmail(EmailModel emailModel);
-        void GetAndSendInTime();
+        void TimerSendEmail();
         IList<UserEntity> GetAllUsersWithEmail();
         IList<EmailEntity> GetEmailList();
         void SaveTimerData(int userId, EmailModel model);
