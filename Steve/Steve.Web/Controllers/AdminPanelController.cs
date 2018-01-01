@@ -7,16 +7,20 @@ using Steve.BLL.Interfaces;
 using System.Collections;
 using Steve.Web.Models;
 using Steve.BLL.Models;
+using AutoMapper;
 
 namespace Steve.Web.Controllers
 {
     public class AdminPanelController : Controller
     {
         IUserService userService;
+        IEmailService emailService;
 
-        public AdminPanelController(IUserService userService)
+        public AdminPanelController(IUserService userService, IEmailService emailService)
         {
             this.userService = userService;
+            this.emailService = emailService;
+
         }
         [HttpGet]
         public IActionResult Index()
@@ -35,60 +39,57 @@ namespace Steve.Web.Controllers
                 {
                     Id = user.Id,
                     Login = user.Login,
-                    Email = user.Email.EmailAdress,
+                    Email = user.Email,
                     RoleId = user.RoleId,
                     Checked = false
                 });
             }
 
-            ViewBag.A = userList;
-            return View(new EmailViewModel { UserList = userList });
+            return View(new EmailViewModel { Users = userList });
         }
         [HttpPost]
-        public IActionResult SendEmail(EmailViewModel model)
+        public IActionResult SendEmail(EmailViewModel viewModel)
         {
             try
             {
-                if (model.ToAddress != null)
+                if (viewModel.ToAddress != null)
                 {
-                    userService.SendEmail(new EmailModel
-                    {
-                        FromAdressTitle = model.FromAdressTitle,
-                        ToAddress = model.ToAddress,
-                        Subject = model.Subject,
-                        BodyContent = model.BodyContent
-                    });
+                    Mapper.Initialize(m => m.CreateMap<EmailViewModel, EmailModel>()
+                    .ForMember(f => f.Users, opt => opt.Ignore()));
+                    var model = Mapper.Map<EmailViewModel, EmailModel>(viewModel);
+                    Mapper.Reset();
+
+                    emailService.SendEmail(model);
                 }
-                foreach (var user in model.UserList)
+                foreach (var user in viewModel.Users)
                 {
                     if (user.Checked == true)
                     {
-                        var email = new EmailModel
-                        {
-                            FromAdressTitle = model.FromAdressTitle,
-                            ToAddress = user.Email,
-                            Subject = model.Subject,
-                            BodyContent = model.BodyContent,
-                            SendingTime = model.SendingTime
-                        };
+                        Mapper.Initialize(m => m.CreateMap<EmailViewModel, EmailModel>()
+                        .ForMember(f => f.Users, opt => opt.Ignore()));
+                        var email = Mapper.Map<EmailViewModel, EmailModel>(viewModel);
+                        Mapper.Reset();
 
-                        if (model.SendingTime <= DateTime.Now)
-                            userService.SendEmail(email);
+                        email.ToAddress = user.Email;
+
+                        if (viewModel.SendingTime <= DateTime.Now)
+                        {
+                            emailService.SendEmail(email);
+                        }
                         else
                         {
-                            userService.SaveTimerData(user.Id, email);
-                            userService.CansellTask();
-                            userService.TimerSendEmail();
+                            emailService.SaveTimerData(user.Id, email);
+                            emailService.CansellTask();
+                            emailService.TimerSendEmail();
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
                 return Content(ex.Message);
             }
-            return View(model);
+            return View(viewModel);
         }
     }
 }

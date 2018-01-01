@@ -10,7 +10,7 @@ namespace Steve.BLL.Models
         public string ToAddress { get; set; }
         public string Subject { get; set; }
         public string BodyContent { get; set; }
-        public List<UserModel> UserList { get; set; }
         public DateTime SendingTime { get; set; }
+        public List<UserModel> Users { get; set; }
     }
 }

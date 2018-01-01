@@ -1,23 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Steve.Web.Models;
 using Steve.BLL.Interfaces;
 using Steve.BLL.Models;
-using Microsoft.IdentityModel.Protocols;
+using AutoMapper;
 
 namespace Steve.Web.Controllers
 {
     public class HomeController : Controller
     {
         IUserService userService;
-        public HomeController(IUserService userService)
+        IEmailService emailService;
+        IGoodsService goodsService;
+
+        public HomeController(IUserService userService, IEmailService emailService, IGoodsService goodsService)
         {
             this.userService = userService;
-            userService.TimerSendEmail();
+            this.emailService = emailService;
+            this.goodsService = goodsService;
+            emailService.TimerSendEmail();
+        }
+
+        [HttpGet]
+        public IActionResult List()
+        {
+            return View(goodsService.GetLaptopList());
         }
 
         [HttpGet]
@@ -31,13 +38,12 @@ namespace Steve.Web.Controllers
         {
             try
             {
-                userService.Registration(new UserModel
-                {
-                    Login = model.Login,
-                    Password = model.Password,
-                    Email = model.Email,
-                    RoleId = (int)UserRoles.User
-                });
+                Mapper.Initialize(m => m.CreateMap<RegisterViewModel, UserModel>());
+                var user = Mapper.Map<RegisterViewModel, UserModel>(model);
+                Mapper.Reset();
+
+                user.RoleId = (int)UserRoles.User;
+                userService.Registration(user);
             }
             catch (Exception ex)
             {
@@ -54,16 +60,15 @@ namespace Steve.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+        public IActionResult Login(LoginViewModel viewModel)
         {
             try
             {
-                userService.Login(new UserModel
-                {
-                    Login = model.Login,
-                    Password = model.Password,
-                });
+                Mapper.Initialize(m => m.CreateMap<LoginViewModel, UserModel>());
+                var model = Mapper.Map<LoginViewModel, UserModel>(viewModel);
+                Mapper.Reset();
 
+                userService.Login(model);
             }
             catch (Exception ex)
             {
@@ -83,7 +88,7 @@ namespace Steve.Web.Controllers
         {
             try
             {
-                userService.ChangePasswordByEmail(new UserModel
+                emailService.ChangePasswordByEmail(new UserModel
                 {
                     Login = model.Login
                 });

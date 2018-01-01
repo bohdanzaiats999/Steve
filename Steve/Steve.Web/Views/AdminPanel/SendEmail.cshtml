@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 @using Steve.BLL.Models;
 @model EmailViewModel
+
 @{
     ViewData["Title"] = "Send Email";
 }
@@ -39,20 +40,20 @@
 
             <h2>List of users</h2>
 
-            @for (var i = 0; i < Model.UserList.Count(); i++)
+            @for (var i = 0; i < Model.Users.Count(); i++)
             {
                 <table>
                     <tr>
                         <td>
-                            <input type="hidden" asp-for="UserList[i].Id" />
-                            <input type="hidden" asp-for="UserList[i].Email" />
-                            <input type="hidden" asp-for="UserList[i].Login" />
+                            <input type="hidden" asp-for="Users[i].Id" />
+                            <input type="hidden" asp-for="Users[i].Email" />
+                            <input type="hidden" asp-for="Users[i].Login" />
 
-                            <text>User @Model.UserList[i].Login</text>
+                            <text>User @Model.Users[i].Login</text>
                         </td>
 
                         <td>
-                            <input type="checkbox" asp-for="UserList[i].Checked" />
+                            <input type="checkbox" asp-for="Users[i].Checked" />
                         </td>
                     </tr>
                 </table>

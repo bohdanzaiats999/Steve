@@ -14,13 +14,8 @@ namespace Steve.BLL.Interfaces
     {
         void Registration(UserModel userModel);
         void Login(UserModel userModel);
-        void ChangePasswordByEmail(UserModel userModel);
         int GetIdRole();
-        void SendEmail(EmailModel emailModel);
-        void TimerSendEmail();
-        IList<UserEntity> GetAllUsersWithEmail();
-        IList<EmailEntity> GetEmailList();
-        void SaveTimerData(int userId, EmailModel model);
-        void CansellTask();
+        IList<UserModel> GetAllUsersWithEmail();
+
     }
 }

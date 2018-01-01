@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steve.BLL", "BLL\Steve.BLL.csproj", "{D627469B-429B-442B-8E9B-ACAD56851B4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Steve.BLL", "BLL\Steve.BLL.csproj", "{D627469B-429B-442B-8E9B-ACAD56851B4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steve.DAL", "DAL\Steve.DAL.csproj", "{2B7AE32F-6821-42EF-AB73-75CF96D78305}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Steve.DAL", "DAL\Steve.DAL.csproj", "{2B7AE32F-6821-42EF-AB73-75CF96D78305}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steve.Web", "Steve.Web\Steve.Web.csproj", "{0E931736-7190-43D0-AECE-7C95F387903A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Steve.Web", "Steve.Web\Steve.Web.csproj", "{0E931736-7190-43D0-AECE-7C95F387903A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steve.Tests", "Steve.Tests\Steve.Tests.csproj", "{60B29662-2CE3-4657-B919-063FFE51D6C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{0E931736-7190-43D0-AECE-7C95F387903A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E931736-7190-43D0-AECE-7C95F387903A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E931736-7190-43D0-AECE-7C95F387903A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60B29662-2CE3-4657-B919-063FFE51D6C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60B29662-2CE3-4657-B919-063FFE51D6C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60B29662-2CE3-4657-B919-063FFE51D6C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60B29662-2CE3-4657-B919-063FFE51D6C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

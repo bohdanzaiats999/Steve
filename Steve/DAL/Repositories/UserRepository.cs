@@ -22,6 +22,11 @@ namespace Steve.DAL.Repositories
             this.entities = context.Set<T>();
         }
 
+        public IList<LaptopEntity> GetAllLaptops()
+        {
+            return this.context.Laptops.ToList();
+        }
+
         public T GetById(object id)
         {
             return this.entities.Find(id);

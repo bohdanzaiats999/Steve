@@ -26,6 +26,9 @@ namespace Steve.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IGoodsService, GoodsService>();
+            services.AddTransient<IEmailService, EmailService>();
+
             services.AddMvc();
         }
 
@@ -48,7 +51,7 @@ namespace Steve.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Login}/{id?}");
+                    template: "{controller=Goods}/{action=GoodsList}/{id?}");
             });
         }
     }

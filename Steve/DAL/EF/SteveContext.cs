@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Protocols;
 using Steve.DAL.Entities;
 
 namespace Steve.DAL.EF
 {
-   public class SteveContext : DbContext
+    public class SteveContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -15,8 +15,7 @@ namespace Steve.DAL.EF
         }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<EmailEntity> Emails { get; set; }
-
-
+        public DbSet<LaptopEntity> Laptops { get; set; }
 
 
     }

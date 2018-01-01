@@ -11,8 +11,4 @@
     <PackageReference Include="Microsoft.IdentityModel.Protocols" Version="2.1.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

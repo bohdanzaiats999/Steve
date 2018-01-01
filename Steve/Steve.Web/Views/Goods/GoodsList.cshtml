@@ -1,0 +1,21 @@
+﻿
+@using Steve.Web.Models
+@using Steve.Web.HtmlHelpers
+@model LaptopListViewModel
+@{
+    ViewData["Title"] = "Laptops";
+}
+
+@foreach (var p in @Model.Laptops)
+{
+    <div>
+        <h3>@p.Name</h3>
+        <p>@p.Color</p>
+        <h4>@p.Price.ToString("# руб")</h4>
+    </div>
+}
+
+<div>
+    @Steve.Web.HtmlHelpers.PagingHelper.PageLinks(Model.PagingInfo, x => Url.Action("GoodsList", new { page = x }))
+</div>
+

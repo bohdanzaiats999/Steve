@@ -22,7 +22,7 @@ namespace Steve.Web.Models
         [Required]
         [Display(Name = "Body Content")]
         public string BodyContent { get; set; }
-        public List<UserModel> UserList { get; set; }
         public DateTime SendingTime { get; set; }
+        public List<UserModel> Users { get; set; }
     }
 }
