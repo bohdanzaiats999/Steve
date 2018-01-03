@@ -10,5 +10,6 @@ namespace Steve.Web.Models
     {
         public IList<LaptopModel> Laptops { get; set; }
         public PagingInfo PagingInfo { get; set; }
+        public string CurrentCategory { get; set; }
     }
 }

@@ -17,14 +17,15 @@ namespace Steve.Web.Controllers
         {
             this.goodsService = goodsService;
         }
-        public IActionResult GoodsList(int page = 1)
+        public IActionResult GoodsList(string category, int page = 1)
         {
             try
             {
                 var laptopListViewModel = new LaptopListViewModel
                 {
-                    Laptops = goodsService.GetLaptopList().
-                    OrderBy(laptop => laptop.Price)
+                    Laptops = goodsService.GetLaptopList()
+                    .Where(p => category == null || p.Color == category)
+                    .OrderBy(laptop => laptop.Id)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize).ToList(),
 
@@ -33,22 +34,10 @@ namespace Steve.Web.Controllers
                         CurrentPage = page,
                         ItemsPerPage = pageSize,
                         TotalItems = goodsService.GetLaptopList().Count
-                    }
-
+                    },
+                    CurrentCategory = category
                 };
                 return View(laptopListViewModel);
-                
-
-                //var laptopsModel = goodsService.GetLaptopList();
-
-                //Mapper.Initialize(m => m.CreateMap<LaptopModel, LaptopViewModel>());
-                //var laptopsView = Mapper.Map<IList<LaptopModel>, IList<LaptopViewModel>>(laptopsModel);
-                //Mapper.Reset();
-
-                //return View(laptopsView
-                //    .OrderBy(laptop => laptop.Price)
-                //    .Skip((page - 1) * pageSize)
-                //    .Take(pageSize).ToList());
             }
             catch (Exception ex)
             {

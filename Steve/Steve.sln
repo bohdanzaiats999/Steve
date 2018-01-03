@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Steve.DAL", "DAL\Steve.DAL.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Steve.Web", "Steve.Web\Steve.Web.csproj", "{0E931736-7190-43D0-AECE-7C95F387903A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steve.Tests", "Steve.Tests\Steve.Tests.csproj", "{60B29662-2CE3-4657-B919-063FFE51D6C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Steve.Tests", "Steve.Tests\Steve.Tests.csproj", "{60B29662-2CE3-4657-B919-063FFE51D6C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

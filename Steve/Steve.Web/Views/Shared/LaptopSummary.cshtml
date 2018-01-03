@@ -1,0 +1,10 @@
+﻿@using Steve.BLL.Models
+@model LaptopModel
+
+<div class="well">
+    <h3>
+        <strong>@Model.Name</strong>
+        <span class="pull-right label label-primary">@Model.Price.ToString("# руб")</span>
+    </h3>
+    <span class="lead">@Model.Color</span>
+</div>

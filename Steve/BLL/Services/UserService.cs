@@ -81,10 +81,10 @@ namespace Steve.BLL.Services
         // Get all users with email objects
         public IList<UserModel> GetAllUsersWithEmail()
         {
+            Mapper.Reset();
             Mapper.Initialize(m => m.CreateMap<UserEntity, UserModel>()
             .ForMember("Email",f=>f.MapFrom(x=>x.Email.EmailAdress)));
             var users = Mapper.Map<IList<UserEntity>, IList<UserModel>>(Database.Repository<UserEntity>().Include(e => e.Email).ToList());
-            Mapper.Reset();
 
             return users;
         }

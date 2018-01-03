@@ -20,9 +20,9 @@ namespace Steve.BLL.Services
         {
             try
             {
+                Mapper.Reset();
                 Mapper.Initialize(m => m.CreateMap<LaptopEntity, LaptopModel>());
                 var laptops = Mapper.Map<IList<LaptopEntity>, IList<LaptopModel>>(Database.Repository<LaptopEntity>().GetAllLaptops());
-                Mapper.Reset();
 
                 return laptops;
             }

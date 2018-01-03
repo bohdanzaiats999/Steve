@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Steve.Web
 {
-    public class Startup 
+    public class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -49,9 +49,32 @@ namespace Steve.Web
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(null,
+                "",
+                new
+                {
+                    controller = "Goods",
+                    action = "GoodsList",
+                    category = (string)null,
+                    page = 1
+                }
+            );
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Goods}/{action=GoodsList}/{id?}");
+                    name: null,
+                    template: "Page{page}",
+                    defaults: new { controller = "Goods", action = "GoodsList", category = (string)null },
+                    constraints: new { page = @"\d+" }
+            );
+
+                routes.MapRoute(null,
+                    "{category}",
+                    new { controller = "Goods", action = "GoodsList", page = 1 }
+            );
+
+                routes.MapRoute(null,
+                     "{category}/Page{page}",
+                    new { controller = "Goods", action = "GoodsList" },
+                    new { page = @"\d+" });
             });
         }
     }

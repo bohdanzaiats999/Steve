@@ -38,9 +38,9 @@ namespace Steve.Web.Controllers
         {
             try
             {
+                Mapper.Reset();
                 Mapper.Initialize(m => m.CreateMap<RegisterViewModel, UserModel>());
                 var user = Mapper.Map<RegisterViewModel, UserModel>(model);
-                Mapper.Reset();
 
                 user.RoleId = (int)UserRoles.User;
                 userService.Registration(user);
@@ -64,9 +64,9 @@ namespace Steve.Web.Controllers
         {
             try
             {
+                Mapper.Reset();
                 Mapper.Initialize(m => m.CreateMap<LoginViewModel, UserModel>());
                 var model = Mapper.Map<LoginViewModel, UserModel>(viewModel);
-                Mapper.Reset();
 
                 userService.Login(model);
             }

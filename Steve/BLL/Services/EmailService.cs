@@ -34,9 +34,9 @@ namespace Steve.BLL.Services
         }
         public IList<EmailModel> GetEmailList()
         {
+            Mapper.Reset();
             Mapper.Initialize(m => m.CreateMap<EmailEntity, EmailModel>());
             var emails = Mapper.Map<IList<EmailEntity>, IList<EmailModel>>(Database.Repository<EmailEntity>().GetAllEmails());
-            Mapper.Reset();
             return emails;
         }
 
@@ -63,9 +63,9 @@ namespace Steve.BLL.Services
                         emailModel.SendingTime = DateTime.MinValue;
                         SendEmail(emailModel);
 
+                        Mapper.Reset();
                         Mapper.Initialize(m => m.CreateMap<EmailModel, EmailEntity>());
                         var emailEntity = Mapper.Map<EmailModel, EmailEntity>(emailModel);
-                        Mapper.Reset();
 
                         Database.Repository<EmailEntity>().Update(emailEntity);
                         Database.SaveChanges();
@@ -111,9 +111,9 @@ namespace Steve.BLL.Services
         {
             var email = Database.Repository<EmailEntity>().GetById(userId);
 
+            Mapper.Reset();
             Mapper.Initialize(m => m.CreateMap<EmailModel,EmailEntity>());
             Mapper.Map<EmailModel, EmailEntity>(model, email);
-            Mapper.Reset();
 
             Database.Repository<EmailEntity>().Update(email);
             Database.SaveChanges();

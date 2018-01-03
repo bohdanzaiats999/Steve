@@ -54,10 +54,10 @@ namespace Steve.Web.Controllers
             {
                 if (viewModel.ToAddress != null)
                 {
+                    Mapper.Reset();
                     Mapper.Initialize(m => m.CreateMap<EmailViewModel, EmailModel>()
                     .ForMember(f => f.Users, opt => opt.Ignore()));
                     var model = Mapper.Map<EmailViewModel, EmailModel>(viewModel);
-                    Mapper.Reset();
 
                     emailService.SendEmail(model);
                 }
@@ -65,10 +65,10 @@ namespace Steve.Web.Controllers
                 {
                     if (user.Checked == true)
                     {
+                        Mapper.Reset();
                         Mapper.Initialize(m => m.CreateMap<EmailViewModel, EmailModel>()
                         .ForMember(f => f.Users, opt => opt.Ignore()));
                         var email = Mapper.Map<EmailViewModel, EmailModel>(viewModel);
-                        Mapper.Reset();
 
                         email.ToAddress = user.Email;
 
