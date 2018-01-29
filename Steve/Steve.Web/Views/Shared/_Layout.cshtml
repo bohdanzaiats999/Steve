@@ -23,20 +23,25 @@
             @{var menu = new NavController(srv);}
 
             @Html.ActionLink("Home", "GoodsList", "Goods", null,
-           new { @class = "btn btn-block btn-default btn-lg" })
+                                      new { @class = "btn btn-block btn-default btn-lg" })
             @{
                 foreach (string link in menu.Menu())
                 {
+
+
                     @Html.RouteLink(link, new
                     {
                         controller = "Goods",
                         action = "GoodsList",
                         category = link,
                         page = 1
-                    }, new
-                    {
-                        @class = "btn btn-block btn-default btn-lg"
-                    })
+                    },
+
+                    new
+                      {
+                          @class = "btn btn-block btn-default btn-lg"
+                   + (link == menu.ViewBag.SelectedColor ? " btn-primary" : "")
+                      })
                 }
             }
             <br />

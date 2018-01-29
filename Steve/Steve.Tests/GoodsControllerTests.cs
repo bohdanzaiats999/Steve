@@ -15,9 +15,10 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
+
 namespace Steve.Tests
 {
-    public class GoodsControllerTests
+    public class GoodsControllerTests 
     {
 
         [Fact]
@@ -95,7 +96,7 @@ namespace Steve.Tests
         }
 
         [Fact]
-        public void Can_Filter_Games()
+        public void Can_Filter_Laptops()
         {
             // Arrange
             var mock = new Mock<IGoodsService>();
@@ -125,13 +126,66 @@ namespace Steve.Tests
             NavController target = new NavController(mock.Object);
 
             // Act
-            List<string> results = ((IEnumerable<string>)target.Invoke().Model).ToList();
+            List<string> results = ((IEnumerable<string>)target.Menu()).ToList();
 
-            // Утверждение
+            // Assert
             Assert.Equal(3, results.Count());
             Assert.Equal("Black", results[0]);
             Assert.Equal("Gray", results[1]);
             Assert.Equal("White", results[2]);
+        }
+
+        [Fact]
+        public void Indicates_Selected_Color()
+        {
+            // Arrange
+            var mock = new Mock<IGoodsService>();
+            mock.Setup(m => m.GetLaptopList()).Returns(GetLaptopList());
+
+            NavController target = new NavController(mock.Object);
+
+            string categoryToSelect = "Black";
+
+            // Act
+            target.Menu(categoryToSelect);
+            string result = target.ViewBag.SelectedColor;
+            
+            // Assert
+            Assert.Equal(categoryToSelect, result);
+        }
+
+        [Fact]
+        public void Generate_Category_Specific_Laptop_Count()
+        {
+            /// Arrange
+            var mock = new Mock<IGoodsService>();
+            mock.Setup(m => m.GetLaptopList()).Returns(GetLaptopList());
+            var controller = new GoodsController(mock.Object);
+            controller.pageSize = 3;
+
+            // Act
+            var res1 = controller.GoodsList("Black");
+            var viewResult1 = Assert.IsType<ViewResult>(res1);
+            var model1 = Assert.IsAssignableFrom<LaptopListViewModel>(viewResult1.Model).PagingInfo.TotalItems;
+
+            var res2 = controller.GoodsList("White");
+            var viewResult2 = Assert.IsType<ViewResult>(res2);
+            var model2 = Assert.IsAssignableFrom<LaptopListViewModel>(viewResult2.Model).PagingInfo.TotalItems;
+
+            var res3 = controller.GoodsList("Gray");
+            var viewResult3 = Assert.IsType<ViewResult>(res3);
+            var model3 = Assert.IsAssignableFrom<LaptopListViewModel>(viewResult3.Model).PagingInfo.TotalItems;
+
+
+            var res4 = controller.GoodsList(null);
+            var viewResult4 = Assert.IsType<ViewResult>(res4);
+            var model4 = Assert.IsAssignableFrom<LaptopListViewModel>(viewResult4.Model).PagingInfo.TotalItems;
+
+            // Assert
+            Assert.Equal(3, model1);
+            Assert.Equal(1, model2);
+            Assert.Equal(1, model3);
+            Assert.Equal(5, model4);
         }
         private IList<LaptopModel> GetLaptopList()
         {

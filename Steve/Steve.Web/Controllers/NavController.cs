@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Steve.BLL.Interfaces;
 using Steve.BLL.Services;
 
+
 namespace Steve.Web.Controllers
 {
     [ViewComponent]
@@ -16,12 +17,14 @@ namespace Steve.Web.Controllers
         {
             this.goodsService = goodsService;
         }
-        public IEnumerable<string> Menu()
+        public IEnumerable<string> Menu(string category = null)
         {
+            ViewBag.SelectedColor = category;
+
             IEnumerable<string> colors = goodsService.GetLaptopList()
              .Select(laptop => laptop.Color)
              .Distinct()
-             .OrderBy(x => x);
+             .OrderBy(x => x).ToList();
             
             return colors;
         }

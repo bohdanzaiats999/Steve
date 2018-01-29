@@ -33,7 +33,8 @@ namespace Steve.Web.Controllers
                     {
                         CurrentPage = page,
                         ItemsPerPage = pageSize,
-                        TotalItems = goodsService.GetLaptopList().Count
+                        TotalItems = category == null ?
+                        goodsService.GetLaptopList().Count : goodsService.GetLaptopList().Where(laptop => laptop.Color == category).Count()
                     },
                     CurrentCategory = category
                 };

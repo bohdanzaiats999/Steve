@@ -28,6 +28,7 @@ namespace Steve.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IGoodsService, GoodsService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<ICartService, CartService>();
 
             services.AddMvc();
         }
